@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
     //on recipe item selected open steps activity
     @Override
     public void onRecipeSelected(Recipe recipe) {
-        Intent intent = new Intent(this, RecipeSteps.class);
+        Intent intent = new Intent(this, StepListActivity.class);
         intent.putExtra(RECIPE_SELECTED, recipe);
         startActivity(intent);
     }

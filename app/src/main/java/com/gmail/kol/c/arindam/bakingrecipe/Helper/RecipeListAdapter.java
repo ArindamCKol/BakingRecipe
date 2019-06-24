@@ -37,6 +37,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter <RecipeListAdapter.R
         }
     }
 
+    //interface for recycler view item click
     public interface RecipeClickListener {
         void onClick(Recipe recipe);
     }

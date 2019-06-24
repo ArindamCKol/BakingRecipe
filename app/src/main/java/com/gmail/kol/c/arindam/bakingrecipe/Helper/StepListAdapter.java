@@ -13,35 +13,55 @@ import com.gmail.kol.c.arindam.bakingrecipe.R;
 
 import java.util.List;
 
-public class RecipeStepsAdapter extends RecyclerView.Adapter <RecipeStepsAdapter.RecipeStepsViewHolder> {
+public class StepListAdapter extends RecyclerView.Adapter <StepListAdapter.RecipeStepsViewHolder> {
     private List<Recipe.Step> steps;
+    private StepClickListener stepClickListener;
 
-    public class RecipeStepsViewHolder extends RecyclerView.ViewHolder {
+    public StepListAdapter(StepClickListener listener) {
+        stepClickListener = listener;
+    }
+
+    public class RecipeStepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView recipeStepDescription;
         public RecipeStepsViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeStepDescription = itemView.findViewById(R.id.recipe_step_description);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            stepClickListener.onClick(getAdapterPosition());
+        }
+    }
+
+    //interface for recycler view item click
+    public interface StepClickListener {
+        void onClick(int position);
     }
 
     @NonNull
     @Override
-    public RecipeStepsAdapter.RecipeStepsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public StepListAdapter.RecipeStepsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.recipe_steps_item,viewGroup,false);
+        View view = inflater.inflate(R.layout.step_list_item,viewGroup,false);
 
         return new RecipeStepsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecipeStepsViewHolder viewHolder, int position) {
-        viewHolder.recipeStepDescription.setText(steps.get(position).getShortDescription());
+        if(position == 0) {
+            viewHolder.recipeStepDescription.setText("Ingredients");
+        } else {
+            viewHolder.recipeStepDescription.setText(steps.get(position-1).getShortDescription());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return steps.size();
+        return (steps.size()+1);
     }
 
     public void setSteps(List<Recipe.Step> stepList ) {

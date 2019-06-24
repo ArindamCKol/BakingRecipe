@@ -13,10 +13,10 @@ import com.gmail.kol.c.arindam.bakingrecipe.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecipeDetailFragment extends Fragment {
+public class StepDetailFragment extends Fragment {
 
 
-    public RecipeDetailFragment() {
+    public StepDetailFragment() {
         // Required empty public constructor
     }
 
