@@ -62,6 +62,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter <RecipeListAdapter.R
         return recipes.size();
     }
 
+    //get list of recipe
     public void setRecipeList(List<Recipe> recipeList) {
         recipes = recipeList;
         notifyDataSetChanged();

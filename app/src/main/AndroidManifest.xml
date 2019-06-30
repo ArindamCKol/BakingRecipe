@@ -13,14 +13,16 @@
         android:theme="@style/AppTheme">
         <activity android:name=".IngredientListActivity"></activity>
         <activity android:name=".StepDetailActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StepListActivity" />
+        <activity android:name=".StepListActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -14,7 +14,9 @@ import com.squareup.moshi.Types;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,19 +25,47 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements RecipeListFragment.OnRecipeItemSelected{
     //url for recipes
     private String url = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+    public static final String RECIPE_SELECTED = "selected_recipe";
+
+    private String jsonString;
+    private List<Recipe> recipeList = new ArrayList<>();
     private RecipeListFragment recipeListFragment;
     private FragmentManager fragmentManager;
-    public static final String RECIPE_SELECTED = "selected_recipe";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new DownloadRecipeJSON().execute(url);
 
-        //initialise fragment
-        fragmentManager = getSupportFragmentManager();
-        recipeListFragment = new RecipeListFragment();
+        if(savedInstanceState == null) {
+
+            //start async task to get json result
+            try {
+                jsonString = new DownloadRecipeJSON().execute(url).get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //initialise fragment
+            fragmentManager = getSupportFragmentManager();
+            recipeListFragment = new RecipeListFragment();
+
+            if(jsonString == null) {
+                recipeListFragment.setErrorText(getString(R.string.network_error));
+                recipeListFragment.setRecipeList(null);
+            } else {
+                recipeListFragment.setErrorText(null);
+                recipeList = getRecipesFromJSON(jsonString);
+                recipeListFragment.setRecipeList(recipeList);
+            }
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.recipe_list_fragment,recipeListFragment)
+                    .commit();
+        }
     }
 
     //on recipe item selected open steps activity
@@ -67,19 +97,8 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
         }
 
         @Override
-        protected void onPostExecute(String jsonString) {
-            if(jsonString == null) {
-                recipeListFragment.setErrorText(getString(R.string.network_error));
-                recipeListFragment.setRecipeList(null);
-            } else {
-                recipeListFragment.setErrorText(null);
-                List<Recipe> recipeList = getRecipesFromJSON(jsonString);
-                recipeListFragment.setRecipeList(recipeList);
-            }
+        protected void onPostExecute(String json) {
 
-            fragmentManager.beginTransaction()
-                    .add(R.id.recipe_list_fragment,recipeListFragment)
-                    .commit();
         }
     }
 

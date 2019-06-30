@@ -3,6 +3,8 @@ package com.gmail.kol.c.arindam.bakingrecipe.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import com.gmail.kol.c.arindam.bakingrecipe.R;
 import com.gmail.kol.c.arindam.bakingrecipe.Model.Recipe;
 import com.gmail.kol.c.arindam.bakingrecipe.Helper.RecipeListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Fragment to hold recipe list
@@ -74,5 +77,11 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.Re
     @Override
     public void onClick(Recipe recipe) {
         recipeItemSelected.onRecipeSelected(recipe);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList("recipe_list", (ArrayList<? extends Parcelable>) recipeList);
+        super.onSaveInstanceState(outState);
     }
 }

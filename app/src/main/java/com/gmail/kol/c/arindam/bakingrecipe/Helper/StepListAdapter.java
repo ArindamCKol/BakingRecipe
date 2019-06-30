@@ -13,6 +13,7 @@ import com.gmail.kol.c.arindam.bakingrecipe.R;
 
 import java.util.List;
 
+//recycler view adapter for steps list + ingredient
 public class StepListAdapter extends RecyclerView.Adapter <StepListAdapter.RecipeStepsViewHolder> {
     private List<Recipe.Step> steps;
     private StepClickListener stepClickListener;
@@ -53,8 +54,10 @@ public class StepListAdapter extends RecyclerView.Adapter <StepListAdapter.Recip
     @Override
     public void onBindViewHolder(@NonNull RecipeStepsViewHolder viewHolder, int position) {
         if(position == 0) {
+            //show ingredient as first item
             viewHolder.recipeStepDescription.setText("Ingredients");
         } else {
+            //show steps description in other items
             viewHolder.recipeStepDescription.setText(steps.get(position-1).getShortDescription());
         }
     }
